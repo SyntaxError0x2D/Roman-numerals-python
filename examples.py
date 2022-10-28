@@ -1,5 +1,4 @@
 from roman import ToRoman, FromRoman
-import os
 
 def example_ToRoman():
     examples = [1, 3, 4, 5, 15, 64]
