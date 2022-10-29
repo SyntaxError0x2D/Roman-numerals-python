@@ -54,7 +54,8 @@ def check(syms):
     if negCheck(syms) and rowCheck(syms): return(True)
     else: return(False)
 
-def FromRoman(syms):
+def FromRoman(syms: type=str) -> int:
+    syms = syms.upper()
     if not check(syms): return(False)
     tot = 0
     for i in negCheck(syms): tot += i
@@ -96,7 +97,7 @@ def clean(Roman):
         if i not in rms: neoRoman += Roman[i]
     return(neoRoman)
 
-def ToRoman(num):
+def ToRoman(num: type=int) -> str:
     return(clean(rough(num)))
 
 
