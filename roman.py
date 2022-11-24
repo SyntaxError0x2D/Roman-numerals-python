@@ -1,4 +1,4 @@
-symsLS = ["I", "V", "X", "L", "C", "D", "M", "⊽", "x̄"]
+symsLS = ["I", "V", "X", "L", "C", "D", "M"]
 
 
 def getVal(sym):
@@ -54,8 +54,7 @@ def check(syms):
     if negCheck(syms) and rowCheck(syms): return(True)
     else: return(False)
 
-def FromRoman(syms: type=str) -> int:
-    syms = syms.upper()
+def FromRoman(syms:type=str or list) -> int:
     if not check(syms): return(False)
     tot = 0
     for i in negCheck(syms): tot += i
@@ -64,40 +63,19 @@ def FromRoman(syms: type=str) -> int:
 
 ### Dec to roman!
 
-def rough(num):
-    rollN = 1
-    Roman = []
-    while rollN != len(symsLS)+1:
-        if num - getVal(symsLS[-rollN]) >= 0:
-            Roman.append(symsLS[-rollN])
-            num -= getVal(symsLS[-rollN])
-        else: rollN += 1
-    return(Roman)
-
-def clean(Roman):
-    latest = ""
-    row = 0
-    rows = []
-    for indx, val in enumerate(Roman):
-        if val == latest:
-            row += 1
-        else: row = 0 ; latest = val
-        if row > 2:
-            rows.append([indx-3, indx+1])
-    rms = []
-    for i in rows:
-        tot = 0
-        for n in Roman[i[0]:i[1]]: tot += getVal(n)
-        tot += getVal(Roman[i[0]])
-        Roman[i[0]:i[0]+2] = [symsLS[sndx(tot)-1], getSym(tot)]
-        for i in range(i[0]+2, i[1]):
-            rms.append(i)
-    neoRoman = ""
-    for i in range(len(Roman)):
-        if i not in rms: neoRoman += Roman[i]
-    return(neoRoman)
-
-def ToRoman(num: type=int) -> str:
-    return(clean(rough(num)))
-
-
+def ToRoman(num:type=int) -> str:
+    if num > 3999: return(False)
+    pieces = [int(str(num)[i])*10**(len(str(num))-i-1) for i in range(len(str(num)))]
+    roman = []
+    for indx, val in enumerate(pieces):
+        baseNum = int(val/10**(len(pieces)-indx-1))
+        if baseNum <= 3:
+            val = getSym(10**(len(pieces)-indx-1))*baseNum
+        elif baseNum == 4: 
+            val = getSym(10**(len(pieces)-indx-1)) + getSym(5*10**(len(pieces)-indx-1))
+        elif 9>baseNum>4:
+            val = getSym(5*10**(len(pieces)-indx-1)) + (getSym(10**(len(pieces)-indx-1)) * (baseNum-5))
+        else:
+            val = getSym(10**(len(pieces)-indx-1)) + getSym(10**(len(pieces)-indx))
+        roman.append(val)
+    return("".join(roman))
